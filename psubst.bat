@@ -63,9 +63,9 @@ if /i "%~3" == "/p" call :init_persist
 
 if /i "%~2" == "/p" call :load_persist
 
-if /i not "%~2" == "/d" set subst_path="!subst_path!"
+if /i not "%~2" == "/d" set psubst_path="!psubst_path!"
 
-subst !subst_disk! !subst_path!
+subst !psubst_disk! !psubst_path!
 
 if /i "%~3" == "/p" call :save_persist
 
@@ -76,60 +76,63 @@ goto :EOF
 
 
 :init
-set subst_file="%TEMP%\$subst_persist$.reg"
+set psubst_disk=
+set psubst_path=
+set psubst_line=
+set psubst_file="%TEMP%\$psubst_persist$.reg"
 goto :EOF
 
 
 :init_disk
 if "%~1" == "" goto :EOF
-set subst_disk=%~d1
-if "!subst_disk:~-1!" == "\" set subst_disk=!subst_disk:~0,-1!
+set psubst_disk=%~d1
+if "!psubst_disk:~-1!" == "\" set psubst_disk=!psubst_disk:~0,-1!
 goto :EOF
 
 
 :init_path
 if "%~1" == "" goto :EOF
 if /i "%~1" == "/d" (
-	set subst_path=%~1
+	set psubst_path=%~1
 	goto :EOF
 )
-set subst_path=%~df1
-set subst_path=!subst_path:/=\!
-if "!subst_path:~-1!" == ":" set subst_path=!subst_path!\
-if "!subst_path:~-1!" == "\" (
-	if not "!subst_path:~-2,1!" == ":" set subst_path=!subst_path:~0,-1!
+set psubst_path=%~df1
+set psubst_path=!psubst_path:/=\!
+if "!psubst_path:~-1!" == ":" set psubst_path=!psubst_path!\
+if "!psubst_path:~-1!" == "\" (
+	if not "!psubst_path:~-2,1!" == ":" set psubst_path=!psubst_path:~0,-1!
 )
 goto :EOF
 
 
 :init_persist
-echo REGEDIT4 > !subst_file!
-echo [HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\DOS Devices] >> !subst_file!
+echo REGEDIT4 > !psubst_file!
+echo [HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\DOS Devices] >> !psubst_file!
 
-if /i "!subst_path!" == "/d" (
+if /i "!psubst_path!" == "/d" (
 	rem
 	rem SUBST drive1: /D /P
 	rem
-	echo "!subst_disk!"=- >> !subst_file!
+	echo "!psubst_disk!"=- >> !psubst_file!
 ) else (
 	rem
 	rem SUBST drive1: [drive2:]path /P
 	rem
-	echo "!subst_disk!"="\\??\\!subst_path:\=\\!" >> !subst_file!
+	echo "!psubst_disk!"="\\??\\!psubst_path:\=\\!" >> !psubst_file!
 )
 goto :EOF
 
 
 :load_persist
-set subst_path=
-start /wait regedit /ea !subst_file! "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\DOS Devices"
-for /f "delims== tokens=1,*" %%a in ( 'findstr "??" !subst_file!' ) do (
-	set subst_line=%%~a
+set psubst_path=
+start /wait regedit /ea !psubst_file! "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\DOS Devices"
+for /f "delims== tokens=1,*" %%a in ( 'findstr "??" !psubst_file!' ) do (
+	set psubst_line=%%~a
 
-	if "!subst_disk!" == "!subst_line!" (
-		set subst_path=%%~b
-		set subst_path=!subst_path:\\??\\=!
-		set subst_path=!subst_path:\\=\!
+	if "!psubst_disk!" == "!psubst_line!" (
+		set psubst_path=%%~b
+		set psubst_path=!psubst_path:\\??\\=!
+		set psubst_path=!psubst_path:\\=\!
 		goto :EOF
 	)
 )
@@ -138,37 +141,37 @@ goto :EOF
 
 :save_persist
 if errorlevel 1 (
-	if /i not "!subst_path!" == "/d" goto :EOF
+	if /i not "!psubst_path!" == "/d" goto :EOF
 	echo Persistent drive was unregistered.
 )
-start /wait regedit -s !subst_file!
+start /wait regedit -s !psubst_file!
 goto :EOF
 
 
 :print_persist
-start /wait regedit /ea !subst_file! "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\DOS Devices"
-for /f "delims== tokens=1,*" %%a in ( 'findstr "??" !subst_file!' ) do (
-	set subst_disk=%%~a
-	set subst_path=%%~b
-	set subst_path=!subst_path:\\??\\=!
-	set subst_path=!subst_path:\\=\!
+start /wait regedit /ea !psubst_file! "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\DOS Devices"
+for /f "delims== tokens=1,*" %%a in ( 'findstr "??" !psubst_file!' ) do (
+	set psubst_disk=%%~a
+	set psubst_path=%%~b
+	set psubst_path=!psubst_path:\\??\\=!
+	set psubst_path=!psubst_path:\\=\!
 
-	if not defined subst_line (
-		set subst_line=1
+	if not defined psubst_line (
+		set psubst_line=1
 		echo.
 	)
-	echo !subst_disk!\: =^> !subst_path!
+	echo !psubst_disk!\: =^> !psubst_path!
 )
 goto :EOF
 
 
 :cleanup
-if exist !subst_file! del !subst_file!
+if exist !psubst_file! del !psubst_file!
 
-set subst_disk=
-set subst_path=
-set subst_file=
-set subst_line=
+set psubst_disk=
+set psubst_path=
+set psubst_file=
+set psubst_line=
 
 goto :EOF
 

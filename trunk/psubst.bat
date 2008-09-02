@@ -62,13 +62,15 @@ call :init_path "%~2"
 subst !psubst_disk! !psubst_path!
 
 if /i "%~3" == "/p" (
+	if errorlevel 1 goto stop_reg
 	if /i "%~2" == "/d" (
-		call :reg delete !psubst_disk!
+		call :reg delete !psubst_disk! >nul
 	) else (
-		call :reg add !psubst_disk! !psubst_path!
+		call :reg add !psubst_disk! !psubst_path! >nul
 	)
 )
 
+:stop_reg
 call :cleanup
 
 endlocal
@@ -110,7 +112,7 @@ if /i "%~1" == "/p" (
 	goto :EOF
 )
 
-set psubst_path=%~df1
+set psubst_path=%~1
 set psubst_path=!psubst_path:/=\!
 if "!psubst_path:~-1!" == ":" set psubst_path=!psubst_path!\
 if "!psubst_path:~-1!" == "\" (
@@ -123,12 +125,16 @@ goto :EOF
 
 :reg
 set psubst_line=
+if not "%~3" == "" (
+	set psubst_line=\??\%~3
+	if not "!psubst_line:~-1!" == "\" set psubst_line="!psubst_line!"
+	set psubst_line=/t REG_SZ /d !psubst_line!
+)
+if not "%~2" == "" set psubst_line=/v %~2 !psubst_line!
+if /i not "%~1" == "query" set psubst_line=!psubst_line! /f
 
-if not "%~2" == "" set psubst_line=%psubst_line% /v %~2
-if not "%~3" == "" set psubst_line=%psubst_line% /t REG_SZ /d "\??\%~3"
-if /i not "%~1" == "query" set psubst_line=%psubst_line% /f
-
-reg %~1 "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\DOS Devices" !psubst_line! 2>nul
+reg %~1 "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\DOS Devices" !psubst_line!
+if errorlevel 1 echo REG %1 encoutered error
 goto :EOF
 
 

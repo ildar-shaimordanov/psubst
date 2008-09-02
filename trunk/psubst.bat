@@ -134,7 +134,6 @@ if not "%~2" == "" set psubst_line=/v %~2 !psubst_line!
 if /i not "%~1" == "query" set psubst_line=!psubst_line! /f
 
 reg %~1 "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\DOS Devices" !psubst_line!
-if errorlevel 1 echo REG %1 encoutered error
 goto :EOF
 
 

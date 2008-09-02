@@ -59,15 +59,15 @@ call :init
 call :init_disk "%~1"
 call :init_path "%~2"
 
-if /i "%~3" == "/p" call :init_persist
-
-if /i "%~2" == "/p" call :load_persist
-
-if /i not "%~2" == "/d" set psubst_path="!psubst_path!"
-
 subst !psubst_disk! !psubst_path!
 
-if /i "%~3" == "/p" call :save_persist
+if /i "%~3" == "/p" (
+	if /i "%~2" == "/d" (
+		call :reg delete !psubst_disk!
+	) else (
+		call :reg add !psubst_disk! !psubst_path!
+	)
+)
 
 call :cleanup
 
@@ -96,65 +96,48 @@ if /i "%~1" == "/d" (
 	set psubst_path=%~1
 	goto :EOF
 )
+
+if /i "%~1" == "/p" (
+	set psubst_path=
+	call :reg query > !psubst_file!
+	for /f "tokens=1,2,*" %%a in ( 'findstr ?? !psubst_file!' ) do (
+		if "!psubst_disk!" == "%%~a" (
+			set psubst_path="%%~c"
+			set psubst_path=!psubst_path:\??\=!
+			goto :EOF
+		)
+	)
+	goto :EOF
+)
+
 set psubst_path=%~df1
 set psubst_path=!psubst_path:/=\!
 if "!psubst_path:~-1!" == ":" set psubst_path=!psubst_path!\
 if "!psubst_path:~-1!" == "\" (
 	if not "!psubst_path:~-2,1!" == ":" set psubst_path=!psubst_path:~0,-1!
 )
+
+set psubst_path="!psubst_path!"
 goto :EOF
 
 
-:init_persist
-echo REGEDIT4 > !psubst_file!
-echo [HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\DOS Devices] >> !psubst_file!
+:reg
+set psubst_line=
 
-if /i "!psubst_path!" == "/d" (
-	rem
-	rem SUBST drive1: /D /P
-	rem
-	echo "!psubst_disk!"=- >> !psubst_file!
-) else (
-	rem
-	rem SUBST drive1: [drive2:]path /P
-	rem
-	echo "!psubst_disk!"="\\??\\!psubst_path:\=\\!" >> !psubst_file!
-)
-goto :EOF
+if not "%~2" == "" set psubst_line=%psubst_line% /v %~2
+if not "%~3" == "" set psubst_line=%psubst_line% /t REG_SZ /d "\??\%~3"
+if /i not "%~1" == "query" set psubst_line=%psubst_line% /f
 
-
-:load_persist
-set psubst_path=
-start /wait regedit /ea !psubst_file! "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\DOS Devices"
-for /f "delims== tokens=1,*" %%a in ( 'findstr "??" !psubst_file!' ) do (
-	set psubst_line=%%~a
-
-	if "!psubst_disk!" == "!psubst_line!" (
-		set psubst_path=%%~b
-		set psubst_path=!psubst_path:\\??\\=!
-		set psubst_path=!psubst_path:\\=\!
-		goto :EOF
-	)
-)
-goto :EOF
-
-
-:save_persist
-if errorlevel 1 (
-	if /i not "!psubst_path!" == "/d" goto :EOF
-	echo Persistent drive was unregistered.
-)
-start /wait regedit -s !psubst_file!
+reg %~1 "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\DOS Devices" !psubst_line! 2>nul
 goto :EOF
 
 
 :print_persist
-start /wait regedit /ea !psubst_file! "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\DOS Devices"
-for /f "delims== tokens=1,*" %%a in ( 'findstr "??" !psubst_file!' ) do (
+call :reg query > !psubst_file!
+for /f "tokens=1,2,*" %%a in ( 'findstr ?? !psubst_file!' ) do (
 	set psubst_disk=%%~a
-	set psubst_path=%%~b
-	set psubst_path=!psubst_path:\\??\\=!
-	set psubst_path=!psubst_path:\\=\!
+	set psubst_path=%%~c
+	set psubst_path=!psubst_path:\??\=!
 
 	if not defined psubst_line (
 		set psubst_line=1

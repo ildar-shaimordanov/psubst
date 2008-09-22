@@ -62,10 +62,10 @@ call :init_path "%~2"
 subst !psubst_disk! !psubst_path!
 
 if /i "%~3" == "/p" (
-	if errorlevel 1 goto stop_reg
 	if /i "%~2" == "/d" (
 		call :reg delete !psubst_disk! >nul
 	) else (
+		if errorlevel 1 goto stop_reg
 		call :reg add !psubst_disk! !psubst_path! >nul
 	)
 )

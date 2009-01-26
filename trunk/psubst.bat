@@ -35,7 +35,7 @@ if /i "%~1" == "/p" (
 	rem SUBST /P
 	rem
 
-	subst
+rem	subst
 
 	setlocal enabledelayedexpansion
 	setlocal enableextensions
@@ -144,10 +144,10 @@ for /f "tokens=1,2,*" %%a in ( 'findstr ?? !psubst_file!' ) do (
 	set psubst_path=%%~c
 	set psubst_path=!psubst_path:\??\=!
 
-	if not defined psubst_line (
-		set psubst_line=1
-		echo.
-	)
+rem	if not defined psubst_line (
+rem		set psubst_line=1
+rem		echo.
+rem	)
 	echo !psubst_disk!\: =^> !psubst_path!
 )
 goto :EOF

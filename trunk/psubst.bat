@@ -35,8 +35,6 @@ if /i "%~1" == "/p" (
 	rem SUBST /P
 	rem
 
-rem	subst
-
 	setlocal enabledelayedexpansion
 	setlocal enableextensions
 
@@ -81,7 +79,7 @@ goto :EOF
 set psubst_disk=
 set psubst_path=
 set psubst_line=
-set psubst_file="%TEMP%\$psubst_persist$.reg"
+set psubst_query="HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\DOS Devices"
 goto :EOF
 
 
@@ -101,8 +99,7 @@ if /i "%~1" == "/d" (
 
 if /i "%~1" == "/p" (
 	set psubst_path=
-	call :reg query > !psubst_file!
-	for /f "tokens=1,2,*" %%a in ( 'findstr ?? !psubst_file!' ) do (
+	for /f "tokens=1,2,*" %%a in ( 'reg query !psubst_query! ^| findstr ??' ) do (
 		if "!psubst_disk!" == "%%~a" (
 			set psubst_path="%%~c"
 			set psubst_path=!psubst_path:\??\=!
@@ -133,29 +130,23 @@ if not "%~3" == "" (
 if not "%~2" == "" set psubst_line=/v %~2 !psubst_line!
 if /i not "%~1" == "query" set psubst_line=!psubst_line! /f
 
-reg %~1 "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\DOS Devices" !psubst_line!
+reg %~1 !psubst_query! !psubst_line!
 goto :EOF
 
 
 :print_persist
-call :reg query > !psubst_file!
-for /f "tokens=1,2,*" %%a in ( 'findstr ?? !psubst_file!' ) do (
+for /f "tokens=1,2,*" %%a in ( 'reg query !psubst_query! ^| findstr ??' ) do (
 	set psubst_disk=%%~a
 	set psubst_path=%%~c
 	set psubst_path=!psubst_path:\??\=!
 
-rem	if not defined psubst_line (
-rem		set psubst_line=1
-rem		echo.
-rem	)
 	echo !psubst_disk!\: =^> !psubst_path!
 )
 goto :EOF
 
 
 :cleanup
-if exist !psubst_file! del !psubst_file!
-
+set psubst_query=
 set psubst_disk=
 set psubst_path=
 set psubst_file=

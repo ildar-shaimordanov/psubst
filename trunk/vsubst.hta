@@ -1,0 +1,522 @@
+<html>
+
+<!--
+
+Visual SUBST - Visual Manager of SUBSTed drives
+Copyright (C) 2009 Ildar Shaimordanov
+
+-->
+
+<head>
+<HTA:APPLICATION ID="oHTA"
+	APPLICATIONNAME="VSUBST"
+	BORDER="dialog"
+	BORDERSTYLE="normal"
+	CAPTION="yes"
+	CONTEXTMENU="yes"
+	ICON=""
+	INNERBORDER="no"
+	MAXIMIZEBUTTON="no"
+	MINIMIZEBUTTON="yes"
+	NAVIGABLE="no"
+	SCROLL="no"
+	SCROLLFLAT="no"
+	SELECTION="no"
+	SHOWINTASKBAR="yes"
+	SINGLEINSTANCE="no"
+	SYSMENU="yes"
+	VERSION="1.0"
+	WINDOWSTATE="normal" />
+
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1251" />
+<title>Visual SUBST</title>
+<style type="text/css">
+
+*	{
+	font-family: Verdana, Helvetica, Tahoma, 'Courier New', sans-serif;
+	font-size: 0.97em;
+}
+
+body	{
+	background-color: #CCCCCC;
+	margin: 0;
+	padding: 0;
+	text-align: left;
+}
+
+#body	{
+	padding: 0 10px;
+}
+
+#statusBar	{
+	border: 1px inset #ccc;
+	bottom: 0;
+	position: absolute;
+	width: 100%;
+}
+
+#statusBarCell	{
+	background-color: #000099;
+	color: #fff;
+	height: 100%;
+	width: 0;
+}
+
+#title	{
+	padding: 15px 0 0 0;
+	margin: 0;
+}
+
+a	{
+	color: #0000ff;
+	text-decoration: none;
+}
+
+form	{
+	margin: 0;
+}
+
+fieldset	{
+	margin: 10px 0;
+}
+
+table	{
+	width: 100%;
+}
+
+.column_left	{
+	text-align: right;
+	vertical-align: top;
+	width: 200px;
+}
+
+#SUBST_PATH	{
+	width: 90%;
+}
+
+select	{
+	font-family: Verdana, Helvetica, Tahoma, 'Courier New', sans-serif;
+	width: 100%;
+}
+
+.button	{
+	width: 100px;
+}
+
+pre.rc	{
+	display: none;
+}
+
+</style>
+<script type="text/javascript" language="javascript">
+
+// System dependent handlers
+var fso = new ActiveXObject('Scripting.FileSystemObject');
+var wsh = new ActiveXObject('WScript.Shell');
+var env = wsh.Environment("PROCESS");
+
+// Drive types
+var DT_UNKNOWN		= 0;
+var DT_REMOVABLE	= 1;
+var DT_FIXED		= 2;
+var DT_NETWORK		= 3;
+var DT_CDROM		= 4;
+var DT_RAMDISK		= 5;
+
+// File attributes
+var FA_READONLY		= 1;
+var FA_HIDDEN		= 2;
+var FA_SYSTEM		= 4;
+var FA_DIRECTORY	= 16;
+var FA_ARCHIVE		= 32;
+
+/**
+ * Creates a dialog box that enables the user to select a folder and then returns the selected folder's path.
+ *
+ * @param	Integer	Hwnd		The handle to the parent window of the dialog box. This value can be zero. 
+ * @param	String	sTitle		A String value that represents the title displayed inside the Browse dialog box.
+ * @param	Integer	iOptions	An Integer value that contains the options for the method. This can be zero or a combination of the BIF_xxx values.
+ * @param	Mixed	vRootFolder	The root folder to use in the dialog box. The user cannot browse higher in the tree than this folder. If this value is not specified, the root folder used in the dialog box is the desktop. This value can be a string that specifies the path of the folder or one of the ssfXXX values. 
+ * @return	String	Fully qualified path to folder
+ *
+ * @see		http://msdn.microsoft.com/en-us/library/bb774065(VS.85).aspx
+ * @see		http://msdn.microsoft.com/en-us/library/bb773205(VS.85).aspx
+ * @see		http://msdn.microsoft.com/en-us/library/bb774096(VS.85).aspx
+ * @see		http://blogs.msdn.com/gstemp/archive/2004/02/17/74868.aspx#ctl00___ctl00___ctl00_ctl00_bcr_ctl00___Comments___Comments_ctl07_NameLink
+ */
+function BrowseForFolder(Hwnd, sTitle, iOptions, vRootFolder)
+{
+	var shell = new ActiveXObject("Shell.Application");
+	var folder = shell.BrowseForFolder(Hwnd, sTitle, iOptions, vRootFolder);
+
+	// Dialog has been closed (by the Close command or the Cancel button)
+	if ( folder == null ) {
+		return null;
+	}
+
+	var e;
+	var path = null;
+
+	try {
+		path = folder.ParentFolder.ParseName(folder.Title).Path;
+	} catch (e) {
+		var colon = folder.Title.lastIndexOf(":");
+		if ( colon == -1 ) {
+			return null;
+		}
+
+		path = folder.Title.slice(colon - 1, colon + 1) + "\\";
+	}
+
+	return path;
+}
+
+// Setters
+
+function setDefaultPath(folder, lock)
+{
+	var path = document.getElementById("SUBST_PATH");
+	path.value = String(folder);
+	if ( lock ) {
+		path.readOnly = true;
+		path.disabled = true;
+		document.getElementById("PATH_BROWSE").disabled = true;
+	}
+}
+
+var defaultDiskList = "";
+
+function setAvailDiskList()
+{
+	var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+	var c, d, e, list = "";
+
+	for (var i = 0; i < chars.length; i++) {
+		c = chars.charAt(i);
+
+		// Looking for free drives
+		try {
+			d = fso.GetDrive(c);
+			// Skip specific disks:
+			// 3 - Network Disk
+			// 4 - CD-ROM
+			// 5 - RAM Disk
+			if ( d.DriveType == DT_NETWORK || d.DriveType == DT_CDROM || d.DriveType == DT_RAMDISK ) {
+				continue;
+			}
+			// Skip existing drives
+			if ( d.IsReady ) {
+				continue;
+			}
+		} catch (e) {
+		}
+
+		// Skip persistent disks already mapped in the registry
+		if ( createSubstPersist(c + ":") !== null ) {
+			continue;
+		}
+
+		list += c;
+	}
+
+	if ( list == defaultDiskList ) {
+		return;
+	}
+
+	defaultDiskList = list;
+
+	var sandbox_disk = document.getElementById("SUBST_DISK");
+
+	// remove all options excluding the first one with the prompt of selection
+	sandbox_disk.options.length = 1;
+
+	sandbox_disk.disabled = list.length == 0;
+
+	for (var i = 0; i < list.length; i++) {
+		c = list.charAt(i) + ":";
+		sandbox_disk.options[i + 1] = new Option(c, c);
+	}
+}
+
+function setDefaultPersist()
+{
+	// Prevent unsupported Windows 95/98/Me
+	document.getElementById("persist_disk").disabled = env("OS") != "Windows_NT";
+//	document.getElementById("persist_disk").checked = env("OS") == "Windows_NT";
+}
+
+// Installers
+
+var disabledAlways = false;
+
+function modifyExecuteButton()
+{
+	var path = document.getElementById("SUBST_PATH").value;
+	document.getElementById("execute").disabled = disabledAlways
+		|| defaultDiskList.length == 0 
+		|| path == "" 
+		|| ! fso.FolderExists(path) 
+		|| document.getElementById("SUBST_DISK").options.selectedIndex == 0;
+}
+
+function alerter(err, msg)
+{
+	alert((msg ? msg + "\n" : "") + "\nError Code: " + (err.number & 0xFFFF) + "\nError Message: " + err.description);
+}
+
+function createSubst(disk, path)
+{
+	var exe = wsh.Exec('subst ' + disk + ' "' + path + '"');
+	if ( ! exe.StdErr.AtEndOfStream ) {
+		throw new Error(exe.StdErr.ReadAll());
+	}
+}
+
+function createSubstPersist(disk, path)
+{
+	var key = "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\DOS Devices\\" + disk;
+
+	if ( path ) {
+		wsh.RegWrite(key, "\\??\\" + path, "REG_SZ");
+		return;
+	}
+
+	try {
+		return wsh.RegRead(key);
+	} catch(e) {
+		return null;
+	}
+}
+
+function installSubst()
+{
+	var e, f, path, disk, persist;
+
+	path = document.getElementById("SUBST_PATH").value;
+
+	disk = document.getElementById("SUBST_DISK").options;
+	disk = disk[disk.selectedIndex].value;
+
+	persist = document.getElementById("persist_disk").checked;
+
+	try {
+		// create the virtual drive
+		createSubst(disk, path);
+
+		// Make a persistent disk (if it needs)
+		if ( persist ) {
+			createSubstPersist(disk, path);
+		}
+	} catch(e) {
+		disabledAlways = true;
+		modifyExecuteButton();
+		alerter(e, "The error has been encountered.");
+		return;
+	}
+}
+
+// Initialization routines
+
+var ctx_menu_checked;
+
+function modifyCtxMenu(modify)
+{
+	var e;
+
+	var key1 = 'HKEY_LOCAL_MACHINE\\SOFTWARE\\Classes\\Directory\\shell\\VSUBST\\';
+	var key2 = key1 + 'command\\';
+
+	if ( modify === null ) {
+		try {
+			return wsh.RegRead(key2 + '\\');
+		} catch(e) {
+			return null;
+		}
+	}
+
+	try {
+		if ( modify ) {
+			var cmd = env('COMSPEC') + ' /c "start /b "" "' + oHTA.commandLine.match(/^"([^"]+)"/)[1] + '" /FOLDER "%1""';
+			wsh.RegWrite(key1, 'SUBST it!', "REG_SZ");
+			wsh.RegWrite(key2, cmd, "REG_SZ");
+		} else {
+			wsh.RegDelete(key2);
+			wsh.RegDelete(key1);
+		}
+	} catch(e) {
+	}
+}
+
+var timerInterval;
+
+function setTimerInterval(time)
+{
+	if ( ! time || time <= 0 ) {
+		clearInterval(timerInterval);
+		return;
+	}
+
+	timerInterval = setInterval(function()
+	{
+		// Set the list of available disks
+		setAvailDiskList();
+
+		// Modify the OK button
+		modifyExecuteButton();
+
+		// Allow/disallow context menu in Explorer for folders
+		var ctx_menu = document.getElementById('ctx_menu');
+		if ( ! ctx_menu ) {
+			return;
+		}
+
+		if ( ctx_menu_checked != ctx_menu.checked ) {
+			ctx_menu_checked = ctx_menu.checked;
+			modifyCtxMenu(ctx_menu.checked);
+		}
+	}, time);
+}
+
+function initForm(folder)
+{
+	setDefaultPath(folder, folder.length);
+	setDefaultPersist();
+
+	var ctx_menu = document.getElementById('ctx_menu');
+	if ( ctx_menu ) {
+		ctx_menu_checked = 
+		document.getElementById('ctx_menu').checked = !! modifyCtxMenu(null);
+	}
+}
+
+function closeWin()
+{
+	setTimerInterval();
+	window.close();
+}
+
+function handleKeydown(e)
+{
+	var e = e || event;
+	var target = e.target || e.srcElement;
+
+	// F5
+	if ( e.keyCode == 116 ) {
+//		return e.returnValue = false;
+	}
+
+	// ESC
+	if ( e.keyCode == 27 ) {
+		closeWin();
+	}
+}
+
+function initWin()
+{
+	if (oHTA.applicationName !== "VSUBST") {
+		window.close();
+		return;
+	}
+
+	// Specify the configurable parameters
+	var matches;
+	var folder = '';
+
+	if ( ( ( matches = oHTA.commandLine.match(/\/FOLDER "([^"]+)"/) ) || ( matches = oHTA.commandLine.match(/\/FOLDER (\S+)/) ) ) 
+	&& fso.FolderExists(matches[1]) ) {
+		folder = matches[1];
+	}
+
+	// sets window size
+	with (window.screen) {
+		var w = 500, h = 250;
+		moveTo((width - w) / 2, (height - h) / 2);
+		resizeTo(w, h);
+	}
+
+	setTimerInterval(100);
+	initForm(folder);
+}
+
+</script>
+</head>
+
+<body onload="initWin()" onkeydown="handleKeydown()">
+
+<div id="body">
+
+<h4 id="title">Visual SUBST</h4>
+<div style="font-size: 9px;">Copyright &copy; 2009 by Ildar Shaimordanov</div>
+
+<form onsubmit="return false;">
+
+<fieldset>
+<legend>General</legend>
+
+<table>
+<tr>
+<td class="column_left">
+
+<label for="SUBST_PATH" title="Specify the folder which will be assigned">Folder for SUBST</label>
+
+</td>
+<td>
+
+<input type="text" id="SUBST_PATH" />
+
+<input type="button" id="PATH_BROWSE" value="..." onclick="var p = BrowseForFolder(0, this.title, 0, 17); if ( p ) document.getElementById('SUBST_PATH').value = p;" title="Browse folder for SUBST" />
+
+</td>
+</tr>
+<tr>
+<td class="column_left">
+
+<label for="SUBST_DISK" title="Select the drive to use as a shortcut to the SUBSTed folder">Name of the virtual disk</label>
+
+</td>
+<td>
+
+<select id="SUBST_DISK">
+<option>Select the drive letter</option>
+</select>
+
+</td>
+</tr>
+<tr>
+<td class="column_left">&nbsp;</td>
+<td>
+
+<input type="checkbox" id="persist_disk" value="1" disabled="disabled" />
+<label for="persist_disk" title="Apply this for the persistent usage of virtual disk">Use the persistent virtual disk</label>
+
+</td>
+</tr>
+</table>
+</fieldset>
+
+<table>
+</tr>
+<tr>
+<td class="column_left">&nbsp;</td>
+<td>
+
+<input type="button" class="button" id="execute" value="OK" onclick="installSubst(); closeWin()" disabled="disabled" />
+<input type="button" class="button" id="close" value="Cancel" onclick="closeWin()" />
+
+<!--
+<br />
+<input type="checkbox" id="ctx_menu" value="1" />
+<label for="ctx_menu" title="Apply this to install this tool to the context menu of Explorer">Add to context menu for folders</label>
+-->
+
+</td>
+</tr>
+</table>
+</form>
+
+</div>
+
+</body>
+</html>
+

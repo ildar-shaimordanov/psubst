@@ -248,19 +248,19 @@ function setDefaultPersist()
 
 // Installers
 
-var disabledAlways = false;
-
 function modifyExecuteButton()
 {
 	var path = document.getElementById("SUBST_PATH").value;
-	document.getElementById("execute").disabled = disabledAlways
+	document.getElementById("execute").disabled = modifyExecuteButton.disabled
 		|| defaultDiskList.length == 0 
 		|| path == "" 
 		|| ! fso.FolderExists(path) 
 		|| document.getElementById("SUBST_DISK").options.selectedIndex == 0;
 }
 
-function alerter(err, msg)
+modifyExecuteButton.disabled = false;
+
+function alarm(err, msg)
 {
 	alert((msg ? msg + "\n" : "") + "\nError Code: " + (err.number & 0xFFFF) + "\nError Message: " + err.description);
 }
@@ -309,16 +309,14 @@ function installSubst()
 			createSubstPersist(disk, path);
 		}
 	} catch(e) {
-		disabledAlways = true;
+		modifyExecuteButton.disabled = true;
 		modifyExecuteButton();
-		alerter(e, "The error has been encountered.");
+		alarm(e, "The error has been encountered.");
 		return;
 	}
 }
 
 // Initialization routines
-
-var ctx_menu_checked;
 
 function modifyCtxMenu(modify)
 {
@@ -327,7 +325,8 @@ function modifyCtxMenu(modify)
 	var key1 = 'HKEY_LOCAL_MACHINE\\SOFTWARE\\Classes\\Directory\\shell\\VSUBST\\';
 	var key2 = key1 + 'command\\';
 
-	if ( modify === null ) {
+	if ( ! arguments.callee.initailized ) {
+		arguments.callee.initailized = true;
 		try {
 			return wsh.RegRead(key2 + '\\');
 		} catch(e) {
@@ -348,16 +347,14 @@ function modifyCtxMenu(modify)
 	}
 }
 
-var timerInterval;
-
 function setTimerInterval(time)
 {
 	if ( ! time || time <= 0 ) {
-		clearInterval(timerInterval);
+		clearInterval(arguments.callee.timerInterval);
 		return;
 	}
 
-	timerInterval = setInterval(function()
+	arguments.callee.timerInterval = setInterval(function()
 	{
 		// Set the list of available disks
 		setAvailDiskList();
@@ -371,8 +368,8 @@ function setTimerInterval(time)
 			return;
 		}
 
-		if ( ctx_menu_checked != ctx_menu.checked ) {
-			ctx_menu_checked = ctx_menu.checked;
+		if ( ctx_menu.checkedOldValue != ctx_menu.checked ) {
+			ctx_menu.checkedOldValue = ctx_menu.checked;
 			modifyCtxMenu(ctx_menu.checked);
 		}
 	}, time);
@@ -385,8 +382,8 @@ function initForm(folder)
 
 	var ctx_menu = document.getElementById('ctx_menu');
 	if ( ctx_menu ) {
-		ctx_menu_checked = 
-		document.getElementById('ctx_menu').checked = !! modifyCtxMenu(null);
+		ctx_menu.checkedOldValue = 
+		ctx_menu.checked = !! modifyCtxMenu(null);
 	}
 }
 
@@ -431,7 +428,7 @@ function initWin()
 	// sets window size
 	with (window.screen) {
 		var w = 500, h = 250;
-		moveTo((width - w) / 2, (height - h) / 2);
+		//moveTo((width - w) / 2, (height - h) / 2);
 		resizeTo(w, h);
 	}
 
@@ -504,11 +501,9 @@ function initWin()
 <input type="button" class="button" id="execute" value="OK" onclick="installSubst(); closeWin()" disabled="disabled" />
 <input type="button" class="button" id="close" value="Cancel" onclick="closeWin()" />
 
-<!--
 <br />
 <input type="checkbox" id="ctx_menu" value="1" />
 <label for="ctx_menu" title="Apply this to install this tool to the context menu of Explorer">Add to context menu for folders</label>
--->
 
 </td>
 </tr>

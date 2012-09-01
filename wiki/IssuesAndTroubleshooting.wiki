@@ -5,7 +5,7 @@
 
 == Psubst'd drive are not mapped ==
 
-On some systems psubst'd drives are not mapped if psubst was run under privileges of regular users or even Local Administrators. It reguires to be run twice as Administrator and a regular user. See a workaround in issue 4:
+On some systems psubst'd drives are not mapped if psubst was run under privileges of regular users. It reguires to be run twice as Administrator and a regular user. See a workaround in issue 4:
 
   First Run As Admin:
   {{{

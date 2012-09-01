@@ -1,0 +1,10 @@
+#summary Summarize issues and their solutions.
+#labels Featured
+
+== BSOD ==
+
+issue 5 had been created to inform that sometimes usage of the tool leads to BSOD. In fact this is not direct influence of different programs each other. Moreover, it may be the specific behaviour of a single program. From the description of the issue provided by Harald Eiermann we can see that BSOD appears only after applying this script, reboot and login. 
+
+  I faced a BSOD when using the script on a system with Trend Micro 10.x virus scan. It worked with Trend Micro virus scanner version 8.x before.
+
+It seems that Trend Micro 10.x has troubles working with permanently subst'd drives. 

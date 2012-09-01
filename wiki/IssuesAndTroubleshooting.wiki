@@ -1,5 +1,22 @@
-#summary Summarize issues and their solutions.
+#summary Summarize known issues and their solutions.
 #labels Featured
+
+<wiki:toc />
+
+== Psubst'd drive are not mapped ==
+
+On some systems psubst'd drives are not mapped if psubst was run under privileges of regular users or even Local Administrators. It reguires to be run twice as Administrator and a regular user. See a workaround in issue 4:
+
+  First Run As Admin:
+  {{{
+  psubst Z: "\\192.168.1.193\raid" /P
+  }}}
+  That will create the registry entry.
+
+  Then as normal user:
+  {{{
+  psubst Z: "\\192.168.1.193\raid"
+  }}}
 
 == BSOD ==
 

@@ -22,7 +22,7 @@ On some systems psubst'd drives are not mapped if psubst was run under privilege
 
 == BSOD ==
 
-issue 5 had been created to inform that sometimes usage of the tool leads to BSOD. In fact this is not direct influence of different programs each other. Moreover, it may be the specific behaviour of a single program. From the description of the issue we can see that BSOD appears only after applying this script, reboot and login. 
+issue 5 had been created to inform that sometimes usage of the tool led to BSOD. In fact this is not direct influence of different programs each other. Moreover, it may be the specific behaviour of a single program. From the description of the issue we can see that BSOD appears only after applying this script, reboot and login. 
 
 Harald Eiermann said:
   I faced a BSOD when using the script on a system with Trend Micro 10.x virus scan. It worked with Trend Micro virus scanner version 8.x before.

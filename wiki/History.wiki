@@ -1,6 +1,7 @@
 #labels Featured
 === History ===
-{{{
+
+<pre>
 
 2009/03/06 - Version 2.4 Stable. 
              Earlier, to see persistent drives the 'REG QUERY' command was made to the temporary file. 
@@ -20,4 +21,5 @@
 2008/08/31 - Version 1.1. 
              Minor changes (the more accurate init of vars, unified names of vars). 
 2008/08/30 - The first release. 
-}}}
+
+</pre>

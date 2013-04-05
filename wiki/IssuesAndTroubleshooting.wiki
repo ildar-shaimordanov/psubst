@@ -48,3 +48,18 @@ HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\DriveIcons
 `X` refers for the real drive letter. Populate the default value in each key with the particular values and restart the system to apply changes. 
 
 See for details the following link: http://www.digwin.com/cant-rename-subst-drive-in-ultimate-32bit
+
+== Can't SUBST a path ==
+If you try to SUBST a path to the existing drive you will get two different error messages:
+
+The drive `G:` is a physical or logical drive name
+{{{
+Invalid parameter - G:
+}}}
+
+The specified drive is a substituted drive
+{{{
+Drive already SUBSTed
+}}}
+
+The issue 8 describes this problem. Anyway, you have to specify another name for substituted paths. 

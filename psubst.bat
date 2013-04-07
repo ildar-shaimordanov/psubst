@@ -93,7 +93,7 @@ goto :EOF
 :init_path
 if "%~1" == "" goto :EOF
 if /i "%~1" == "/d" (
-	set psubst_path=%~1
+	set "psubst_path=%~1"
 	goto :EOF
 )
 
@@ -109,7 +109,7 @@ if /i "%~1" == "/p" (
 	goto :EOF
 )
 
-set psubst_path=%~1
+set "psubst_path=%~1"
 set psubst_path=!psubst_path:/=\!
 if "!psubst_path:~-1!" == ":" set psubst_path=!psubst_path!\
 if "!psubst_path:~-1!" == "\" (

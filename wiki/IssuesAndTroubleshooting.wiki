@@ -85,4 +85,6 @@ The specified drive is a substituted drive
 Drive already SUBSTed
 }}}
 
-The issue 8 describes this problem. Anyway, you have to specify another name for substituted paths. 
+~~The issue 8 describes this problem. Anyway, you have to specify another name for substituted paths. ~~
+
+The real problem with the issue 8 had to do with another reason that was fixed yet. Anyway, if you meet the messages as described above be sure that your system doesn't use the drive name you want to substitute. 

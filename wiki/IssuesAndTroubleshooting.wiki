@@ -88,3 +88,18 @@ Drive already SUBSTed
 ~~The issue 8 describes this problem. Anyway, you have to specify another name for substituted paths. ~~
 
 The real problem with the issue 8 had to do with another reason that was fixed yet. Anyway, if you meet the messages as described above be sure that your system doesn't use the drive name you want to substitute. 
+
+== Map network path with different credential for system account? ==
+
+[http://code.google.com/u/Madnik7@gmail.com/ Madnik7] has asked (issue 9):
+ can I map network path for system account? The problem is that sytem account does not have access to network resource without especifying a credential.
+
+Commonly, they don't recommend use SUBST for mapping network paths. There is an appropriate tool NET USE. Nevertheless, there is interesting discussion that has to do with this issue (see this forum http://www.dostips.com/forum/viewtopic.php?f=3&t=5258). It is based on the undocumented features of SUBST command given at http://ss64.com/nt/subst.html:
+
+ if a drive is substed using characters other than A-Z ($,#, :, !, 0-9) it will not appear in Windows Explorer or in the drives reported by SUBST. 
+
+So we could use the following workaround solution:
+{{{
+subst #: \\servername\share
+subst Z: #:\
+}}}

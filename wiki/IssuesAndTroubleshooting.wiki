@@ -103,3 +103,9 @@ So we could use the following workaround solution:
 subst #: \\servername\share
 subst Z: #:\
 }}}
+
+== Missing the final parenthesis ) of the path after restart ==
+
+[https://code.google.com/u/110168451143980461231/ jpach4] has informed about the bug when the folder contains final parenthesis (issue 10). 
+
+This bug has been fixed in the revision r36 and the new version 2.6 is available for downloading from the [http://code.fosshub.com/psubst/downloads FossHub Downloads] page. 

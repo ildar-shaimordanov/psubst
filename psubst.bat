@@ -123,7 +123,7 @@ goto :EOF
 :reg
 set psubst_line=
 if not "%~3" == "" (
-	set psubst_line=\??\%~3
+	set "psubst_line=\??\%~3"
 	if not "!psubst_line:~-1!" == "\" set psubst_line="!psubst_line!"
 	set psubst_line=/t REG_SZ /d !psubst_line!
 )

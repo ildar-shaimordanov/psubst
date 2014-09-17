@@ -1,6 +1,9 @@
 #labels Featured
 === History ===
 
+2014/09/17 - Version 2.6 Stable.
+Fixed Issue 10: Missing the final parenthesis ) of the path after restart 
+
 2013/04/07 - Version 2.5 Stable.
 The  issue 8  was fixed (troubles with special characters in substituted paths). 
 

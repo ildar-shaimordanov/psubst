@@ -1,6 +1,9 @@
 ### History ###
 
-2014/09/17 - Version 2.6 Stable.
+2015/12/05 - Version 2.6.2 Stable.
+Fixed [Issue 11]: Version inofrmation of psubst.bat
+
+2014/09/17 - Version 2.6.1 Stable.
 Fixed [Issue 10](https://code.google.com/p/psubst/issues/detail?id=10): Missing the final parenthesis ) of the path after restart
 
 2013/04/07 - Version 2.5 Stable.

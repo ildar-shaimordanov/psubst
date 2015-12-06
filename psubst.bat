@@ -2,6 +2,8 @@
 
 
 if "%~1" == "/?" (
+	echo:%~n0 %PSUBST.REVISION%
+	echo:
 	echo:Associates a path with a drive letter.
 	echo:Manages persistent substituted ^(virtual^) drives.
 	echo:
@@ -14,7 +16,7 @@ if "%~1" == "/?" (
 	echo:  /D             Deletes a substituted ^(virtual^) drive.
 	echo:  /P             Manages a persistent drives ^(create, delete, display^)
 	echo:
-	echo:Type SUBST with no parameters to display a list of current virtual drives.
+	echo:Type PSUBST with no parameters to display a list of current virtual drives.
 	goto :EOF
 )
 

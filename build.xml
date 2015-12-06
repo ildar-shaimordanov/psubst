@@ -9,6 +9,7 @@
 	<exec executable="git" logError="true" failonerror="true" outputproperty="psubst.revision">
 		<arg value="describe"/>
 		<arg value="--tags"/>
+		<arg value="--long"/>
 	</exec>
 
 	<echo>Revision: ${psubst.revision}</echo>

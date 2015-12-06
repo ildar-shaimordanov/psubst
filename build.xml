@@ -24,16 +24,14 @@
 <target name="clean" 
 	description="Deletes build" 
 	>
-	<delete includeemptydirs="yes">
-	<fileset dir="build" includes="*/**" />
-	</delete>
+	<delete dir="build" />
 </target>
 
 
 <target name="distclean" 
+	depends="clean" 
 	description="Deletes build" 
 	>
-	<delete dir="build" />
 </target>
 
 

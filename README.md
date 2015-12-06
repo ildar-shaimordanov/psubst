@@ -4,7 +4,7 @@
 
 [Issues and troubleshooting](IssuesAndTroubleshooting.md)
 
-[Download](http://code.fosshub.com/psubst/downloads)
+[Download](https://github.com/ildar-shaimordanov/psubst/releases)
 
 ## _Abstract_ ##
 

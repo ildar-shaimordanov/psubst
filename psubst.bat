@@ -2,19 +2,19 @@
 
 
 if "%~1" == "/?" (
-	echo Associates a path with a drive letter.
-	echo Manages persistent substituted ^(virtual^) drives.
-	echo.
-	echo PSUBST [drive1: [drive2:]path] [/P]
-	echo PSUBST drive1: /D [/P]
-	echo.
-	echo   drive1:        Specifies a virtual drive to which you want to assign a path.
-	echo   [drive2:]path  Specifies a physical drive and path you want to assign to
-	echo                  a virtual drive.
-	echo   /D             Deletes a substituted ^(virtual^) drive.
-	echo   /P             Manages a persistent drives ^(create, delete, display^)
-	echo.
-	echo Type SUBST with no parameters to display a list of current virtual drives.
+	echo:Associates a path with a drive letter.
+	echo:Manages persistent substituted ^(virtual^) drives.
+	echo:
+	echo:PSUBST [drive1: [drive2:]path] [/P]
+	echo:PSUBST drive1: /D [/P]
+	echo:
+	echo:  drive1:        Specifies a virtual drive to which you want to assign a path.
+	echo:  [drive2:]path  Specifies a physical drive and path you want to assign to
+	echo:                 a virtual drive.
+	echo:  /D             Deletes a substituted ^(virtual^) drive.
+	echo:  /P             Manages a persistent drives ^(create, delete, display^)
+	echo:
+	echo:Type SUBST with no parameters to display a list of current virtual drives.
 	goto :EOF
 )
 
@@ -140,7 +140,7 @@ for /f "tokens=1,2,*" %%a in ( 'reg query !psubst_query! ^| findstr ??' ) do (
 	set psubst_path=%%~c
 	set psubst_path=!psubst_path:\??\=!
 
-	echo !psubst_disk!\: =^> !psubst_path!
+	echo:!psubst_disk!\: =^> !psubst_path!
 )
 goto :EOF
 

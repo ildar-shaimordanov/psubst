@@ -1,0 +1,41 @@
+<project name="psubst" default="build" basedir=".">
+
+
+<target name="build" 
+	depends="clean" 
+	description="Build revision" 
+	>
+
+	<exec executable="git" logError="true" failonerror="true" outputproperty="psubst.revision">
+		<arg value="describe"/>
+		<arg value="--tags"/>
+	</exec>
+
+	<echo>Revision: ${psubst.revision}</echo>
+
+	<mkdir dir="build" />
+
+	<copy file="psubst.bat" todir="build" />
+
+	<replace file="build/psubst.bat" token="%PSUBST.REVISION%" value="${psubst.revision}" />
+</target>
+
+
+<target name="clean" 
+	description="Deletes build" 
+	>
+	<delete includeemptydirs="yes">
+	<fileset dir="build" includes="*/**" />
+	</delete>
+</target>
+
+
+<target name="distclean" 
+	description="Deletes build" 
+	>
+	<delete dir="build" />
+</target>
+
+
+</project>
+

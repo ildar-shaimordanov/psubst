@@ -1,9 +1,3 @@
-
-
-
----
-
-
 ## Psubst'd drive are not mapped ##
 
 On some systems psubst'd drives are not mapped if psubst was run under privileges of regular users. It reguires to be run twice as Administrator and a regular user. See a workaround in [issue 4](https://code.google.com/p/psubst/issues/detail?id=4):
@@ -108,3 +102,10 @@ subst Z: #:\
 [jpach4](https://code.google.com/u/110168451143980461231/) has informed about the bug when the folder contains final parenthesis ([issue 10](https://code.google.com/p/psubst/issues/detail?id=10)).
 
 This bug has been fixed in the revision [r36](https://code.google.com/p/psubst/source/detail?r=36) and the new version 2.6 is available for downloading from the [FossHub Downloads](http://code.fosshub.com/psubst/downloads) page.
+
+## Mapping `A:` or `B:` to a folder on another drive
+
+As it was mentioned in the [issue 16](https://github.com/ildar-shaimordanov/psubst/issues/16), there is trouble in mapping the drives `A:` or `B:` to a folder on another drive. As @bourbongoat said this issue can be solved removing the registry key for the particular drives:
+
+> Deleting the registry key for the b:\ drive will fix it, however. I've also reproduced the issue with the a:\ drive, but others seem to work without issue.
+

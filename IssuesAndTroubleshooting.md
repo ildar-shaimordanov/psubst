@@ -105,7 +105,7 @@ This bug has been fixed in the revision [r36](https://code.google.com/p/psubst/s
 
 ## Mapping `A:` or `B:` to a folder on another drive
 
-As it was mentioned in the [issue 16](https://github.com/ildar-shaimordanov/psubst/issues/16), there is trouble in mapping the drives `A:` or `B:` to a folder on another drive. As @bourbongoat said this issue can be solved removing the registry key for the particular drives:
+As it was mentioned in the [issue 16](https://github.com/ildar-shaimordanov/psubst/issues/16), there is trouble in mapping the drives `A:` or `B:` to a folder on another drive. @bourbongoat said that this issue can be solved removing the registry key for the particular drives:
 
 > Deleting the registry key for the b:\ drive will fix it, however. I've also reproduced the issue with the a:\ drive, but others seem to work without issue.
 

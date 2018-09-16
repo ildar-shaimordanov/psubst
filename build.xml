@@ -1,11 +1,34 @@
 <project name="psubst" default="build" basedir=".">
 
 
+<target name="build-zip"
+	depends="build"
+	description="Build revision and create zip file"
+	>
+	<zip
+		destfile="build/psubst_${psubst.revision}.zip"
+		basedir="build"
+		includes="psubst.bat"
+		/>
+</target>
+
+
 <target name="build" 
-	depends="clean" 
+	depends="clean,get-revision"
 	description="Build revision" 
 	>
 
+	<mkdir dir="build" />
+
+	<copy file="psubst.bat" todir="build" />
+
+	<replace file="build/psubst.bat" token="%PSUBST.REVISION%" value="${psubst.revision}" />
+</target>
+
+
+<target name="get-revision"
+	description="Print revision"
+	>
 	<exec executable="git" logError="true" failonerror="true" outputproperty="psubst.revision">
 		<arg value="describe"/>
 		<arg value="--tags"/>
@@ -13,12 +36,6 @@
 	</exec>
 
 	<echo>Revision: ${psubst.revision}</echo>
-
-	<mkdir dir="build" />
-
-	<copy file="psubst.bat" todir="build" />
-
-	<replace file="build/psubst.bat" token="%PSUBST.REVISION%" value="${psubst.revision}" />
 </target>
 
 

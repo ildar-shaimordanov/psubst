@@ -1,3 +1,19 @@
+# Issues and Troubleshooting
+
+<!-- md-toc-begin -->
+# Table of Content
+* [Issues and Troubleshooting](#issues-and-troubleshooting)
+  * [Psubst'd drive are not mapped](#psubstd-drive-are-not-mapped)
+  * [BSOD](#bsod)
+  * [LABELING](#labeling)
+    * [Solution from search](#solution-from-search)
+    * [Another user-defined solution](#another-user-defined-solution)
+  * [Can't SUBST a path](#cant-subst-a-path)
+  * [Map network path with different credential for system account?](#map-network-path-with-different-credential-for-system-account)
+  * [Missing the final parenthesis ) of the path after restart](#missing-the-final-parenthesis--of-the-path-after-restart)
+  * [Mapping `A:` or `B:` to a folder on another drive](#mapping-a-or-b-to-a-folder-on-another-drive)
+<!-- md-toc-end -->
+
 ## Psubst'd drive are not mapped ##
 
 On some systems psubst'd drives are not mapped if psubst was run under privileges of regular users. It reguires to be run twice as Administrator and a regular user. See a workaround in [issue 4](https://code.google.com/p/psubst/issues/detail?id=4):

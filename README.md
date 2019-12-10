@@ -1,12 +1,30 @@
 # Persistent SUBST command #
 
-[History](History.md)
+* [History](History.md)
+* [Issues and troubleshooting](IssuesAndTroubleshooting.md)
+* [Download](https://github.com/ildar-shaimordanov/psubst/releases)
 
-[Issues and troubleshooting](IssuesAndTroubleshooting.md)
+<!-- md-toc-begin -->
+# Table of Content
+* [Persistent SUBST command](#persistent-subst-command)
+  * [Abstract](#abstract)
+  * [Divide and power](#divide-and-power)
+  * [Do we need it?](#do-we-need-it)
+  * [How does this work?](#how-does-this-work)
+  * [Shortcomings](#shortcomings)
+    * [Indefinite format](#indefinite-format)
+    * [Inconstancy](#inconstancy)
+    * [Can it be joined?](#can-it-be-joined)
+  * [Overview of the new features](#overview-of-the-new-features)
+    * [Standard](#standard)
+    * [Extended](#extended)
+    * [Additional features](#additional-features)
+    * [New shortcomings](#new-shortcomings)
+  * [How to install?](#how-to-install)
+  * [Related links](#related-links)
+<!-- md-toc-end -->
 
-[Download](https://github.com/ildar-shaimordanov/psubst/releases)
-
-## _Abstract_ ##
+## Abstract ##
 
 _Associates a path with a drive letter and extends the standard SUBST command allowing to create persistent substituted drives between startups._
 

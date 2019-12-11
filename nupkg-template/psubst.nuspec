@@ -9,5 +9,6 @@
         <description>Associates a path with a drive letter and extends the standard SUBST command allowing to create persistent substituted drives between startups.</description>
         <projectUrl>https://github.com/ildar-shaimordanov/psubst</projectUrl>
         <licenseUrl>https://raw.githubusercontent.com/ildar-shaimordanov/psubst/master/LICENSE</licenseUrl>
+        <tags>psubst batchfile disk-management persistent-drive</tags>
     </metadata>
 </package>

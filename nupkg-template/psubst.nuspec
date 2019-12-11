@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+    <metadata>
+        <id>psubst</id>
+        <version>%PSUBST.VERSION%</version>
+        <authors>Ildar Shaimordanov</authors>
+        <owners>Ildar Shaimordanov</owners>
+        <title>psubst</title>
+        <description>Associates a path with a drive letter and extends the standard SUBST command allowing to create persistent substituted drives between startups.</description>
+        <projectUrl>https://github.com/ildar-shaimordanov/psubst</projectUrl>
+        <licenseUrl>https://raw.githubusercontent.com/ildar-shaimordanov/psubst/master/LICENSE</licenseUrl>
+    </metadata>
+</package>

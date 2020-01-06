@@ -11,6 +11,7 @@
   * [Can't SUBST a path](#cant-subst-a-path)
   * [Map network path with different credential for system account?](#map-network-path-with-different-credential-for-system-account)
   * [Missing the final parenthesis ) of the path after restart](#missing-the-final-parenthesis--of-the-path-after-restart)
+  * [Peristent needs administrator](#peristent-needs-administrator)
   * [Mapping `A:` or `B:` to a folder on another drive](#mapping-a-or-b-to-a-folder-on-another-drive)
 <!-- md-toc-end -->
 
@@ -118,6 +119,10 @@ subst Z: #:\
 [jpach4](https://code.google.com/u/110168451143980461231/) has informed about the bug when the folder contains final parenthesis ([issue 10](https://code.google.com/p/psubst/issues/detail?id=10)).
 
 This bug has been fixed in the revision [r36](https://code.google.com/p/psubst/source/detail?r=36) and the new version 2.6 is available for downloading from the [FossHub Downloads](http://code.fosshub.com/psubst/downloads) page.
+
+## Peristent needs administrator
+
+Sometimes the script fails as it requires to be run as administrator (f.i.: see the [issue 15](https://github.com/ildar-shaimordanov/psubst/issues/15)). The best recommendation is to give the administrative permissions while executing the script.
 
 ## Mapping `A:` or `B:` to a folder on another drive
 

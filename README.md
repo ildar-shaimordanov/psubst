@@ -184,7 +184,7 @@ Download the archive following by the download link, unpack it or checkout the s
 Time ago I was asked to publish the tool as the Chocolatey package (see [issue 14](https://github.com/ildar-shaimordanov/psubst/issues/14)). If you use Chocolatey actively, you can install it as follows:
 
 ```
-choco install psubst [--version=2.6.2]
+choco install psubst
 ```
 
 Also you can find it by this link: https://chocolatey.org/packages/psubst.

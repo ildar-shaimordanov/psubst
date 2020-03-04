@@ -1,5 +1,10 @@
 ### History ###
 
+2020/03/04 - Version 3.0.1 Stable.
+-- Prevent psubst persistent drive twice
+-- Add check result of persistent substed drive
+-- Improve `psubst /p` slightly
+
 2020/03/04 - Version 3.0.0 Beta
 Enable privileges elevation with the `/PF` option
 

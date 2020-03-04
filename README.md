@@ -35,79 +35,79 @@ _Associates a path with a drive letter and extends the standard SUBST command al
 Since oldest times in Windows there is admirable feature to map some path with name of a virtual drive using the `SUBST` command. This feature simplifies an access to objects on a disk. It means a usage of name of a virtual drive instead of a long path. For example, the following command is used to create virtual drive `Z` for the path `C:\Documents and Settings\All Users\Shared Documents`:
 
 ```
-subst Z: "C:\Documents and Settings\All Users\Shared Documents" 
+subst Z: "C:\Documents and Settings\All Users\Shared Documents"
 ```
 
 So to reach targets in this folder it does not need to type the full path or go over a tree of folders in the Explorer window. To select the `Z:` drive is enough.
 
 ## Do we need it? ##
 
-There is several certain examples when this feature is needful:
+There are several certain examples when this feature is useful:
 
 * Temporary stub when the physical drive is missing;
-* Operational system limitation for the size of filename (256 characters);
+* Operational system limitation for the size of filename (for example, 256 characters);
 * Working of some application within own space;
-* Emulation of other operational systems.
+* Emulating other operational systems.
 
-## How does this work? ##
+## How does it work? ##
+
+Print the list of existing drives:
+
+```
+subst
+```
 
 Create new virtual drive:
 
 ```
-subst Z: "C:\Documents and Settings\All Users\Shared Documents" 
+subst Z: "C:\Documents and Settings\All Users\Shared Documents"
 ```
 
-Delete virtual drive:
+Delete the virtual drive:
 
 ```
-subst Z: /D 
-```
-
-Print a list of existing drives:
-
-```
-subst 
+subst Z: /D
 ```
 
 ## Shortcomings ##
 
 ### Indefinite format ###
 
-There is strong agreement about a correct typing of the substituted path:
+There are strict conventions on correct typing the substituted path:
 
-1. a path should not be trailed by a backslash;
+1. the path should not be trailed by a backslash;
 1. the root path should be ended by a backslash.
 
 For example, these are correct
 
 ```
-subst Z: "C:\Documents and Settings\All Users\Shared Documents" 
-subst Z: C:\ 
+subst Z: "C:\Documents and Settings\All Users\Shared Documents"
+subst Z: C:\
 ```
 
 But these are incorrect:
 
 ```
-subst Z: "C:\Documents and Settings\All Users\Shared Documents\" 
-subst Z: C: 
+subst Z: "C:\Documents and Settings\All Users\Shared Documents\"
+subst Z: C:
 ```
 
 ### Inconstancy ###
 
-However restart of a system destroys a virtual disk. What to do? A disk can be created after startup. But what to do, when a disk is needed on early steps of a startup? For example, to run services? There is system feature to start a virtual disk from the system registry:
+However restart of the system destroys the virtual disk. What to do? A disk can be created after startup. But what to do, when the disk is required on early steps of the startup? For example, to run services? There is system feature to establish virtual disks from the system registry:
 
 ```
-REGEDIT4 
+REGEDIT4
 
-[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\DOS Devices] 
-"Z:"="\\??\\C:\\Documents and Settings\\All Users\\Shared Documents" 
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\DOS Devices]
+"Z:"="\\??\\C:\\Documents and Settings\\All Users\\Shared Documents"
 ```
 
-It is enough to create a text file with the extension `.REG` and run it. When the next starting up of a system, the virtual disk will be exist at logon. It needs to define a name of disk and path. Note that each backslash in the path is doubled.
+It is enough to create a text file with the extension `.REG` and run it. When the next system starting, the virtual disk will be established. It needs to define the name of the disk and path. Note that each backslash in the path is doubled.
 
 ### Can it be joined? ###
 
-Answer is yes! This article is the result of the work devoted to availability of joining both features. The batch script was developed for cover problems described earlier. Also it adds a lot of owned features.
+Answer is yes! This article is the result of the work devoted to availability of joining both features. The batch script was developed to cover problems described earlier. Also it adds a lot of owned features.
 
 ## Overview of the new features ##
 
@@ -115,22 +115,22 @@ Answer is yes! This article is the result of the work devoted to availability of
 
 As well as the standard `SUBST` command this script named as `PSUBST.BAT` implements all standard features of the command.
 
-Create a disk:
+Print all virtual drives:
 
 ```
-psubst drive1: drive2:path 
+psubst
 ```
 
-Delete a disk:
+Create the virtual drive:
 
 ```
-psubst drive1: /D 
+psubst drive1: drive2:path
 ```
 
-Print of existing disks:
+Delete the virtual drive:
 
 ```
-psubst 
+psubst drive1: /D
 ```
 
 ### Extended ###

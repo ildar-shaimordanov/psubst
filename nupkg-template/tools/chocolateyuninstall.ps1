@@ -1,1 +1,1 @@
-﻿Remove-Item -Path "$env:ChocolateyInstal/bin/psubst.bat"
+﻿Remove-Item -Path "$env:ChocolateyInstall/bin/psubst.bat"

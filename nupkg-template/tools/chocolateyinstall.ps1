@@ -2,4 +2,4 @@
 Uninstall-BinFile -Name "psubst"
 
 $dir = "$(Split-Path -Parent $MyInvocation.MyCommand.Definition)"
-Copy-Item -Path "$dir/psubst.bat" -Destination "$env:ChocolateyInstal/bin"
+Copy-Item -Path "$dir/psubst.bat" -Destination "$env:ChocolateyInstall/bin"

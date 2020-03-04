@@ -178,6 +178,18 @@ if /i "%~1" == "/PF" (
 ) else (
 	call :psubst_persist_reg
 )
+
+call :psubst_lookup "%psubst_disk%"
+
+if /i "%psubst_reg_op%" == "add" if not defined psubst_persist_disk (
+	echo:%~n0: Unable to add persistently SUBSTed drive
+	exit /b 1
+)
+
+if /i "%psubst_reg_op%" == "delete" if defined psubst_persist_disk (
+	echo:%~n0: Unable to delete persistently SUBSTed drive
+	exit /b 1
+)
 goto :EOF
 
 :psubst_persist_reg
@@ -201,16 +213,21 @@ goto :EOF
 
 
 :psubst_print
+setlocal
 call :psubst_lookup
+endlocal
 goto :EOF
 
 
 :psubst_lookup
+set "psubst_persist_disk="
+set "psubst_persist_path="
+
 for /f "tokens=1,2,*" %%a in ( 'reg query "%psubst_regkey%"' ) do ^
 for /f "tokens=1,* delims=\\" %%k in ( "%%~c" ) do ^
 if "%%k" == "??" if "%~1" == "" (
 	echo:%%~a\: =^> %%~l
-) else if "%~1" == "%%~a" (
+) else if /i "%~1" == "%%~a" (
 	set "psubst_persist_disk=%%~a"
 	set "psubst_persist_path=%%~l"
 	goto :EOF

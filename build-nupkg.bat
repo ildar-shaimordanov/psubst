@@ -32,6 +32,6 @@ Copy-Item -Path $git_file -Destination "$builddir/tools"
 
 Get-ChildItem $builddir -File -Recurse | ForEach {
 	$enc = if ( $_ -Match "\.(nuspec|bat)$" ) { "ASCII" } else { "UTF8" }
-	$_ = $_.FullName
-	( Get-Content $_ ) -Replace "%PSUBST\.VERSION%", $version -Replace "%PSUBST\.REVISION%", $revision | Set-Content $_ -Verbose -Encoding $enc
+	$f = $_.FullName
+	( Get-Content $f ) -Replace "%PSUBST\.VERSION%", $version -Replace "%PSUBST\.REVISION%", $revision | Set-Content $f -Verbose -Encoding $enc
 }

@@ -1,24 +1,22 @@
+::PSUBST %PSUBST.REVISION%
+::
+::Associates a path with a drive letter.
+::Manages persistently substituted (virtual) drives.
+::
+::PSUBST [drive1: [drive2:]path] [/P]
+::PSUBST drive1: /D [/P]
+::
+::  drive1:        Specifies a virtual drive to which you want to assign a path.
+::  [drive2:]path  Specifies a physical drive and path you want to assign to
+::                 a virtual drive.
+::  /D             Deletes substituted (virtual) drive.
+::  /P             Manages persistent drives (create, delete, display).
+::
+::Type PSUBST with no parameters to display a list of current virtual drives.
 @echo off
 
 
-if "%~1" == "/?" (
-	echo:%~n0 %PSUBST.REVISION%
-	echo:
-	echo:Associates a path with a drive letter.
-	echo:Manages persistent substituted ^(virtual^) drives.
-	echo:
-	echo:PSUBST [drive1: [drive2:]path] [/P]
-	echo:PSUBST drive1: /D [/P]
-	echo:
-	echo:  drive1:        Specifies a virtual drive to which you want to assign a path.
-	echo:  [drive2:]path  Specifies a physical drive and path you want to assign to
-	echo:                 a virtual drive.
-	echo:  /D             Deletes a substituted ^(virtual^) drive.
-	echo:  /P             Manages a persistent drives ^(create, delete, display^)
-	echo:
-	echo:Type PSUBST with no parameters to display a list of current virtual drives.
-	goto :EOF
-)
+if /i "%~1" == "/?" goto :print_usage
 
 
 if "%~1" == "" (
@@ -154,5 +152,10 @@ set psubst_path=
 set psubst_file=
 set psubst_line=
 
+goto :EOF
+
+
+:print_usage
+for /f "tokens=* delims=:" %%s in ( 'findstr "^::" "%~f0"' ) do echo:%%s
 goto :EOF
 

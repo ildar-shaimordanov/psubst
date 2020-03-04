@@ -1,1 +1,1 @@
-﻿Uninstall-BinFile -Name "psubst"
+﻿Remove-Item -Path "$env:ChocolateyInstal/bin/psubst.bat"

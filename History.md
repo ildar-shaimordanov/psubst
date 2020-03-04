@@ -1,5 +1,8 @@
 ### History ###
 
+2020/03/04 - Version 3.0.0 Beta
+Enable privileges elevation with the `/PF` option
+
 2015/12/05 - Version 2.6.2 Stable.
 Fixed [Issue 11]: Version inofrmation of psubst.bat
 

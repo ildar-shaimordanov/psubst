@@ -38,7 +38,7 @@ Since oldest times in Windows there is admirable feature to map some path with n
 subst Z: "C:\Documents and Settings\All Users\Shared Documents" 
 ```
 
-So to reach targets in this folder it does not need to type the full path or go over  a tree of folders in the Explorer window. To select the `Z:` drive is enough.
+So to reach targets in this folder it does not need to type the full path or go over a tree of folders in the Explorer window. To select the `Z:` drive is enough.
 
 ## Do we need it? ##
 
@@ -135,43 +135,48 @@ psubst
 
 ### Extended ###
 
-Typing the `/P` argument you run the script with the extended features to work with persistent virtual disks.
+Typing the `/P` or `/PF` argument you run the tool with the extended features to work with persistent virtual disks:
 
-Create a persistent virtual drive with saving in the registry:
-
-```
-psubst drive1: drive2:path /P 
-```
-
-Create a virtual drive reading about it from the registry:
-
-```
-psubst drive1: /P 
-```
-
-Delete a drive and wipe out a record from the registry:
-
-```
-psubst drive1: /D /P 
-```
+* `/P` stands for creating, deleting or displaying persistent drives;
+* `/PF` stands for creating and deleting persistent drives using elevated privileges; it can be useful for managing persistent drives by non-administrative users.
 
 Print all virtual persistent drives (read from the registry)
 
 ```
-psubst /P 
+psubst /P
+```
+
+Restore a virtual drive from the persistent drive, if any:
+
+```
+psubst drive1: /P
+```
+
+In the following commands the option `/P` can be replaced with the option `/PF` to elevate privileges.
+
+Create the persistent virtual drive with saving its persistency in the registry:
+
+```
+psubst drive1: drive2:path /P
+```
+
+Delete the persistent drive from the registry:
+
+```
+psubst drive1: /D /P
 ```
 
 ### Additional features ###
 
-Great advantage of the script is independency of existence or lack of the trailing backslashes. It means that incorrect examples described earlier in this article will work always – incorrect input arguments will be transformed to the required format and the command will execute substitution successfully. Nevertheless the standard command works with the slashes in a path correctly, the script transforms these to backslashes usual in Windows.
+Great advantage of the tool is independency of existence or lack of the trailing backslashes. It means that incorrect examples described earlier in this article will work always – incorrect input arguments will be transformed to the required format and the command will execute substitution successfully. Nevertheless the standard command works with the slashes in a path correctly, the script transforms these to backslashes usual in Windows.
 
 ### New shortcomings ###
 
-Are there owned shortcomings? Exactly! There are:
+Are there own shortcomings? Yes, a bit of them! There are:
 
-* this is batch script and it works slower than binary analog;
-* there is probability to run script twice with different arguments and disturb results of both;
-* there is probability to break a script execution when disk have been created but the registry is not updated. But there are so little things.
+* this is batch script and it works a bit slower than binary analog;
+* there is quite weak probability to run the script twice with different arguments and disturb results of both;
+* there is weak probability to break the script execution when disk is already created but the registry is not updated yet. To be honest, it's not lack of this script because managing the drives and updating the registry are two separate independednt actions.
 
 ## How to install? ##
 

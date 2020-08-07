@@ -13,6 +13,7 @@
   * [Missing the final parenthesis ) of the path after restart](#missing-the-final-parenthesis--of-the-path-after-restart)
   * [Peristent needs administrator](#peristent-needs-administrator)
   * [Mapping `A:` or `B:` to a folder on another drive](#mapping-a-or-b-to-a-folder-on-another-drive)
+  * [Recycle bin feature](#recycle-bin-feature)
 <!-- md-toc-end -->
 
 ## Psubst'd drive are not mapped ##
@@ -122,7 +123,9 @@ This bug has been fixed in the revision [r36](https://code.google.com/p/psubst/s
 
 ## Peristent needs administrator
 
-Sometimes the script fails as it requires to be run as administrator (f.i.: see the [issue 15](https://github.com/ildar-shaimordanov/psubst/issues/15)). The best recommendation is to give the administrative permissions while executing the script.
+~~Sometimes the script fails as it requires to be run as administrator (f.i.: see the [issue 15](https://github.com/ildar-shaimordanov/psubst/issues/15)). The best recommendation is to give the administrative permissions while executing the script.~~
+
+It was fixed by the [Version 3.0.1 Stable](https://github.com/ildar-shaimordanov/psubst/releases/tag/v3.0.1).
 
 ## Mapping `A:` or `B:` to a folder on another drive
 
@@ -130,3 +133,12 @@ As it was mentioned in the [issue 16](https://github.com/ildar-shaimordanov/psub
 
 > Deleting the registry key for the b:\ drive will fix it, however. I've also reproduced the issue with the a:\ drive, but others seem to work without issue.
 
+## Recycle bin feature
+
+In the [issue 18](https://github.com/ildar-shaimordanov/psubst/issues/18) I was asked
+
+> ... add a feature so that the files deleted from the virtual drive go into recycle bin...
+
+It is hardly possible to implement the requested feature in easy way so to make it working automatically.
+
+For those who else wants the same feature I recommend to do it manually following the steps as it's explained in this QA: https://superuser.com/questions/222747/recycle-bin-on-substed-drives. It's not 100% reliable but can be assumed as a workaround solution.

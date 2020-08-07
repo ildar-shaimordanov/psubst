@@ -10,7 +10,7 @@
   * [Abstract](#abstract)
   * [Divide and power](#divide-and-power)
   * [Do we need it?](#do-we-need-it)
-  * [How does this work?](#how-does-this-work)
+  * [How does it work?](#how-does-it-work)
   * [Shortcomings](#shortcomings)
     * [Indefinite format](#indefinite-format)
     * [Inconstancy](#inconstancy)

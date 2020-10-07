@@ -22,7 +22,7 @@
   * [Standard](#standard)
   * [Extended](#extended)
   * [Additional features](#additional-features)
-  * [New shortcomings](#new-shortcomings)
+  * [Some shortcomings](#some-shortcomings)
 * [Related links](#related-links)
 <!-- md-toc-end -->
 
@@ -186,13 +186,15 @@ psubst drive1: /D /P
 
 Great advantage of the tool is independency of existence or lack of the trailing backslashes. It means that incorrect examples described earlier in this article will work always – incorrect input arguments will be transformed to the required format and the command will execute substitution successfully. Nevertheless the standard command works with the slashes in a path correctly, the script transforms these to backslashes usual in Windows.
 
-## New shortcomings
+## Some shortcomings
 
 Are there own shortcomings? Yes, a bit of them! There are:
 
 * this is batch script and it works a bit slower than binary analog;
-* there is quite weak probability to run the script twice with different arguments and disturb results of both;
-* there is weak probability to break the script execution when disk is already created but the registry is not updated yet. To be honest, it's not lack of this script because managing the drives and updating the registry are two separate independednt actions.
+* ~~there is quite weak probability to run the script twice with different arguments and disturb results of both~~.
+  In fact, it's not this script issue. It's the issue of any tools having access to any resources at the same time;
+* ~~there is weak probability to break the script execution when disk is already created but the registry is not updated yet. To be honest, it's not lack of this script because managing the drives and updating the registry are two separate independednt actions~~.
+  And it's not the real issue of this script. Every tool implementing a complicated functionality that consists of two ore more steps can be stopped and not complete its work.
 
 # Related links
 

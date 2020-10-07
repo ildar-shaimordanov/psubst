@@ -71,17 +71,17 @@ See for details the following link: http://www.digwin.com/cant-rename-subst-driv
 > Then i mapped a network drive to `U:` using `\\localhost\Folder1`. This allows you to manipulate the defaultLabel and DefaultIcon registries as well as being able to RightClick - Rename the drives. It also works without internet connection since it's connecting to localhost. And the only difference i found was that it appears under Network Locations instead of Hard Disk Drives. The only problem might be if you want to map an unsharable location.
 
 > Steps for newbies:
-    1. Right click on folder you want to map
-    1. Properties
-    1. Sharing Tab
-    1. Share Button
-    1. Here make sure that your use has Read/Write access and that any other users have no rights (do not appear). Administrators are ok.
-    1. Share Button
-    1. In explorer, in the location bar, type: \\localhost
-    1. Right click the folder you just shared
-    1. Map network drive...
-    1. Select the letter you want
-    1. Finish Button
+>   1. Right click on folder you want to map
+>   1. Properties
+>   1. Sharing Tab
+>   1. Share Button
+>   1. Here make sure that your use has Read/Write access and that any other users have no rights (do not appear). Administrators are ok.
+>   1. Share Button
+>   1. In explorer, in the location bar, type: \\localhost
+>   1. Right click the folder you just shared
+>   1. Map network drive...
+>   1. Select the letter you want
+>   1. Finish Button
 
 ## Can't SUBST a path ##
 If you try to SUBST a path to the existing drive you will get two different error messages:

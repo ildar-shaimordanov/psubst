@@ -1,6 +1,6 @@
 # Issues and Troubleshooting
 
-<!-- md-toc-begin -->
+<!-- toc-begin -->
 # Table of Content
 * [Issues and Troubleshooting](#issues-and-troubleshooting)
   * [Psubst'd drive are not mapped](#psubstd-drive-are-not-mapped)
@@ -14,7 +14,7 @@
   * [Peristent needs administrator](#peristent-needs-administrator)
   * [Mapping `A:` or `B:` to a folder on another drive](#mapping-a-or-b-to-a-folder-on-another-drive)
   * [Recycle bin feature](#recycle-bin-feature)
-<!-- md-toc-end -->
+<!-- toc-end -->
 
 ## Psubst'd drive are not mapped ##
 
@@ -132,6 +132,13 @@ It was fixed by the [Version 3.0.1 Stable](https://github.com/ildar-shaimordanov
 As it was mentioned in the [issue 16](https://github.com/ildar-shaimordanov/psubst/issues/16), there is trouble in mapping the drives `A:` or `B:` to a folder on another drive. @bourbongoat said that this issue can be solved removing the registry key for the particular drives:
 
 > Deleting the registry key for the b:\ drive will fix it, however. I've also reproduced the issue with the a:\ drive, but others seem to work without issue.
+
+Also!
+
+> **Warning**
+> Never map to `A:` or `B:`!
+
+As it is been repeatedly noticed: psubst'ing `A:` or `B:` completely breaks updates in Windows 10 and 11, including security updates. if you have do so, you could get the hardly traceable problem because Microsoft error messages mislead and don't point to psubst.
 
 ## Recycle bin feature
 

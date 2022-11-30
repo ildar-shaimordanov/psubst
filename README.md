@@ -1,10 +1,10 @@
 # Persistent SUBST command
 
-* [History](History.md)
 * [Issues and troubleshooting](IssuesAndTroubleshooting.md)
 * [Download](https://github.com/ildar-shaimordanov/psubst/releases)
+* [History](History.md)
 
-<!-- md-toc-begin -->
+<!-- toc-begin -->
 # Table of Content
 * [Persistent SUBST command](#persistent-subst-command)
 * [Abstract](#abstract)
@@ -24,7 +24,7 @@
   * [Additional features](#additional-features)
   * [Some shortcomings](#some-shortcomings)
 * [Related links](#related-links)
-<!-- md-toc-end -->
+<!-- toc-end -->
 
 # Abstract
 
